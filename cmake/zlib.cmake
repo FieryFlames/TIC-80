@@ -2,7 +2,7 @@
 # ZLIB
 ################################
 
-if (NOT N3DS)
+if (NOT N3DS OR NOT PSP)
 
 set(ZLIB_DIR ${THIRDPARTY_DIR}/zlib)
 set(ZLIB_SRC

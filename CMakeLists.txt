@@ -14,7 +14,7 @@ message("VERSION_HASH: ${VERSION_HASH}")
 
 configure_file("${PROJECT_SOURCE_DIR}/version.h.in" "${CMAKE_CURRENT_BINARY_DIR}/version.h")
 
-if(ANDROID OR EMSCRIPTEN OR N3DS OR RPI)
+if(ANDROID OR EMSCRIPTEN OR N3DS OR RPI OR PSP)
     set(BUILD_LIBRETRO_DEFAULT OFF)
     set(BUILD_DEMO_CARTS_DEFAULT OFF)
     set(BUILD_PLAYER_DEFAULT OFF)
@@ -44,7 +44,7 @@ message("BUILD_SDLGPU: ${BUILD_SDLGPU}")
 message("BUILD_TOUCH_INPUT: ${BUILD_TOUCH_INPUT}")
 message("BUILD_STUB: ${BUILD_STUB}")
 
-if (N3DS)
+if (N3DS OR PSP)
     set(BUILD_SDL OFF)
 endif()
 
@@ -53,7 +53,7 @@ if (BAREMETALPI)
     set(BUILD_DEMO_CARTS OFF)
 endif()
 
-if(UNIX AND NOT APPLE AND NOT EMSCRIPTEN AND NOT ANDROID AND NOT N3DS)
+if(UNIX AND NOT APPLE AND NOT EMSCRIPTEN AND NOT ANDROID AND NOT N3DS AND NOT PSP)
     set(LINUX TRUE)
 
     if(CMAKE_HOST_SYSTEM_NAME STREQUAL "FreeBSD")
@@ -64,6 +64,11 @@ endif()
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+if (PSP)
+  set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
+endif()
+
 if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
@@ -130,6 +135,7 @@ include(cmake/sdl.cmake)
 include(cmake/sokol.cmake)
 include(cmake/libretro.cmake)
 include(cmake/n3ds.cmake)
+include(cmake/psp.cmake)
 
 include(cmake/stub.cmake)
 include(cmake/install.cmake)

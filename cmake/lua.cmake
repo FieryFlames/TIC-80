@@ -62,7 +62,7 @@ if(BUILD_WITH_LUA)
     target_compile_definitions(lua PRIVATE LUA_COMPAT_5_2)
     target_include_directories(lua INTERFACE ${THIRDPARTY_DIR}/lua)
 
-    if(N3DS)
+    if(N3DS OR PSP)
         target_compile_definitions(lua PUBLIC LUA_32BITS)
     endif()
 

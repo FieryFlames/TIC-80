@@ -26,7 +26,7 @@ if(BUILD_WITH_JS)
         target_compile_definitions(quickjs PRIVATE DUMP_LEAKS)
     endif()
 
-    if(BAREMETALPI OR N3DS)
+    if(BAREMETALPI OR N3DS OR PSP)
         target_compile_definitions(quickjs PRIVATE POOR_CLIB) 
     endif()
 
