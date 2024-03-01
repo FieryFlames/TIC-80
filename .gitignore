@@ -172,6 +172,8 @@ build/*.sln
 build/.local/
 build/*.dir/
 build/x64/
+build/EBOOT.PBP
+build/PARAM.SFO
 build/linux/tic80.desktop
 build/compile_commands.json
 CMakeSettings.json
