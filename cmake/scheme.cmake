@@ -22,6 +22,10 @@ if(BUILD_WITH_SCHEME)
         target_compile_definitions(scheme PRIVATE S7_N3DS)
     endif()
 
+    if (PSP)
+    target_compile_definitions(scheme PRIVATE S7_PSP)
+    endif()
+
     if (BAREMETALPI)
         target_compile_definitions(scheme PRIVATE S7_BAREMETALPI)
     endif()
