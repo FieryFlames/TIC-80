@@ -683,7 +683,8 @@ void tic_core_blit_ex(tic_mem* tic, tic_blit_callback clb)
         UPDBDR();
         rowPtr += TIC80_MARGIN_LEFT;
 
-        if(*(u16*)&vbank0(core)->vars.offset == 0 && *(u16*)&vbank1(core)->vars.offset == 0)
+        if(&vbank0(core)->vars.offset.x == 0 && &vbank0(core)->vars.offset.y == 0
+        && &vbank1(core)->vars.offset.x == 0 && &vbank1(core)->vars.offset.y == 0)
         {
             // render line without XY offsets
             for(s32 x = (row - TIC80_MARGIN_TOP) * TIC80_WIDTH, end = x + TIC80_WIDTH; x != end; ++x)
