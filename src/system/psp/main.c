@@ -1,13 +1,6 @@
 #include <pspkernel.h>
-#include <pspdisplay.h>
 #include <psprtc.h>
-#include <pspge.h>
-#include <pspgu.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <limits.h>
 #include <string.h>
 
 #include "input.h"
@@ -132,7 +125,6 @@ void main() {
 
 
     psp_gu_init();
-    printf("gu has been init'd\n");
 
     while (!studio_alive(platform.studio)) {
         psp_gu_start_frame();
