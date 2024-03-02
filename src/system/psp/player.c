@@ -68,6 +68,8 @@ void main() {
     while (1) {
         psp_gu_start_frame();
 
+		psp_gamepad_update(&tic_input);
+
         tic80_tick(tic, tic_input, tic_sys_counter_get, tic_sys_freq_get);
 
         psp_gu_draw_frame(tic->screen);
