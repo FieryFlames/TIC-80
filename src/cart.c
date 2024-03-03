@@ -114,15 +114,22 @@ void tic_cart_load(tic_cartridge* cart, const u8* buffer, s32 size)
             return;
     }
 
-#define LOAD_CHUNK(to) memcpy(&to, ptr, MIN(sizeof(to), chunk->size ? retro_le_to_cpu16(chunk->size) : TIC_BANK_SIZE))
+#define LOAD_CHUNK(to) memcpy(&to, aligned_chunk_data_ptr, MIN(sizeof(to), chunk->size ? retro_le_to_cpu16(chunk->size) : TIC_BANK_SIZE))
 
     // load palette chunk first
     {
         const u8* ptr = buffer;
         while (ptr < end)
         {
-            const Chunk* chunk = (Chunk*)ptr;
+            int *aligned_chunk_ptr = aligned_alloc(16, sizeof(Chunk));
+            memcpy(aligned_chunk_ptr, ptr, sizeof(Chunk));
+
+            const Chunk* chunk = (Chunk*)aligned_chunk_ptr;
+
             ptr += sizeof(Chunk);
+
+            int *aligned_chunk_data_ptr = aligned_alloc(16, chunk->size);
+            memcpy(aligned_chunk_data_ptr, ptr, chunk->size);
 
             switch (chunk->type)
             {
@@ -157,8 +164,15 @@ void tic_cart_load(tic_cartridge* cart, const u8* buffer, s32 size)
         const u8* ptr = buffer;
         while(ptr < end)
         {
-            const Chunk* chunk = (Chunk*)ptr;
+            int *aligned_chunk_ptr = aligned_alloc(16, sizeof(Chunk));
+            memcpy(aligned_chunk_ptr, ptr, sizeof(Chunk));
+
+            const Chunk* chunk = (Chunk*)aligned_chunk_ptr;
+
             ptr += sizeof(Chunk);
+
+            int *aligned_chunk_data_ptr = aligned_alloc(16, chunk->size);
+            memcpy(aligned_chunk_data_ptr, ptr, chunk->size);
 
             switch(chunk->type)
             {
@@ -173,10 +187,10 @@ void tic_cart_load(tic_cartridge* cart, const u8* buffer, s32 size)
             case CHUNK_SCREEN:      LOAD_CHUNK(cart->banks[chunk->bank].screen);            break;
             case CHUNK_LANG:        LOAD_CHUNK(cart->lang);                                 break;
             case CHUNK_BINARY:      
-                binary[chunk->bank] = (struct BinaryChunk){chunkSize(chunk), ptr};
+                binary[chunk->bank] = (struct BinaryChunk){chunkSize(chunk), aligned_chunk_data_ptr};
                 break;
             case CHUNK_CODE:        
-                code[chunk->bank] = (struct CodeChunk){chunkSize(chunk), ptr};
+                code[chunk->bank] = (struct CodeChunk){chunkSize(chunk), aligned_chunk_data_ptr};
                 break;
 #if defined(BUILD_DEPRECATED)
             case CHUNK_CODE_ZIP:
